@@ -82,46 +82,44 @@ def main():
                                ["Home", "Data Analysis", "Model Training", "Predictions", "Insights"])
     
     if page == "Home":
-        st.header("🏠 Welcome to Student Dropout Prediction System")
-        
-        st.subheader("📤 Upload Your CSV File OR Generate Sample Data")
-
-# Upload option
-uploaded_file = st.file_uploader("Upload a CSV file with student data", type=["csv"])
-
-# Or generate button
-generate_button = st.button("🚀 Generate Sample Data")
-
-# Decision: Upload or Generate
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.session_state.df = df
-    st.success("✅ CSV data uploaded successfully!")
-
-elif generate_button:
-    with st.spinner("Generating synthetic student data..."):
-        df = st.session_state.predictor.generate_data(1000)
-        st.session_state.df = df
-        st.success("✅ Sample data generated successfully!")
-
-# Show stats if data available
-if 'df' in st.session_state:
-    df = st.session_state.df
-    st.subheader("📊 Dataset Overview")
+    st.header("🏠 Welcome to Student Dropout Prediction System")
     
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.metric("Total Students", len(df))
-    with col2:
-        st.metric("Dropout Rate", f"{df['dropout'].mean():.1%}")
-    with col3:
-        st.metric("Avg Video Views", f"{df['video_views'].mean():.1f}")
-    with col4:
-        st.metric("Avg Quiz Attempts", f"{df['quiz_attempts'].mean():.1f}")
-
-        col1, col2 = st.columns(2)
+    st.subheader("📤 Upload Your CSV File OR Generate Sample Data")
+    
+    # Upload option
+    uploaded_file = st.file_uploader("Upload a CSV file with student data", type=["csv"])
+    
+    # Or generate button
+    generate_button = st.button("🚀 Generate Sample Data")
+    
+    # Decision: Upload or Generate
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        st.session_state.df = df
+        st.success("✅ CSV data uploaded successfully!")
+    
+    elif generate_button:
+        with st.spinner("Generating synthetic student data..."):
+            df = st.session_state.predictor.generate_data(1000)
+            st.session_state.df = df
+            st.success("✅ Sample data generated successfully!")
+    
+    # Show stats if data available
+    if 'df' in st.session_state:
+        df = st.session_state.df
+        st.subheader("📊 Dataset Overview")
         
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Total Students", len(df))
+        with col2:
+            st.metric("Dropout Rate", f"{df['dropout'].mean():.1%}")
+        with col3:
+            st.metric("Avg Video Views", f"{df['video_views'].mean():.1f}")
+        with col4:
+            st.metric("Avg Quiz Attempts", f"{df['quiz_attempts'].mean():.1f}")
+        
+        col1, col2 = st.columns(2)
         with col1:
             st.subheader("📈 Project Overview")
             st.write("""
@@ -131,7 +129,6 @@ if 'df' in st.session_state:
             - **Implement** timely interventions
             - **Improve** student retention rates
             """)
-            
         with col2:
             st.subheader("🔧 Features")
             st.write("""
@@ -140,136 +137,7 @@ if 'df' in st.session_state:
             - Multiple ML model comparisons
             - Actionable insights and recommendations
             """)
-        
-        # Generate sample data
-        if st.button("🚀 Generate Sample Data"):
-            with st.spinner("Generating synthetic student data..."):
-                df = st.session_state.predictor.generate_data(1000)
-                st.session_state.df = df
-                st.success("✅ Sample data generated successfully!")
-                
-                # Show basic stats
-                st.subheader("📊 Dataset Overview")
-                col1, col2, col3, col4 = st.columns(4)
-                
-                with col1:
-                    st.metric("Total Students", len(df))
-                with col2:
-                    st.metric("Dropout Rate", f"{df['dropout'].mean():.1%}")
-                with col3:
-                    st.metric("Avg Video Views", f"{df['video_views'].mean():.1f}")
-                with col4:
-                    st.metric("Avg Quiz Attempts", f"{df['quiz_attempts'].mean():.1f}")
-    
-    elif page == "Data Analysis":
-        st.header("📊 Data Analysis")
-        
-        if 'df' not in st.session_state:
-            st.warning("⚠️ Please generate sample data first from the Home page.")
-            return
-        
-        df = st.session_state.df
-        
-        # Data overview
-        st.subheader("📋 Dataset Overview")
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.write("**First 10 Records:**")
-            st.dataframe(df.head(10))
-        
-        with col2:
-            st.write("**Statistical Summary:**")
-            st.dataframe(df.describe())
-        
-        # Visualizations
-        st.subheader("📈 Data Visualizations")
-        
-        # Engagement distribution
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            fig = px.histogram(df, x='engagement_score', color='dropout', 
-                             title='Engagement Score Distribution')
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with col2:
-            # Dropout rate by engagement level
-            df['engagement_level'] = pd.cut(df['engagement_score'], 
-                                           bins=[0, 15, 30, 100], 
-                                           labels=['Low', 'Medium', 'High'])
-            engagement_dropout = df.groupby('engagement_level')['dropout'].mean()
-            
-            fig = px.bar(x=engagement_dropout.index, y=engagement_dropout.values,
-                        title='Dropout Rate by Engagement Level')
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Feature correlation
-        st.subheader("🔗 Feature Correlations")
-        features = ['video_views', 'quiz_attempts', 'login_frequency', 
-                   'time_spent_hours', 'assignment_submissions', 'dropout']
-        
-        corr_matrix = df[features].corr()
-        fig = px.imshow(corr_matrix, text_auto=True, aspect="auto",
-                       title="Feature Correlation Matrix")
-        st.plotly_chart(fig, use_container_width=True)
-    
-    elif page == "Model Training":
-        st.header("🤖 Model Training")
-        
-        if 'df' not in st.session_state:
-            st.warning("⚠️ Please generate sample data first from the Home page.")
-            return
-        
-        df = st.session_state.df
-        
-        # Model selection
-        st.subheader("⚙️ Model Configuration")
-        model_type = st.selectbox("Select Model:", 
-                                 ["Random Forest", "Logistic Regression", "Decision Tree"])
-        
-        if st.button("🚀 Train Model"):
-            with st.spinner("Training model..."):
-                # Prepare data
-                features = ['video_views', 'quiz_attempts', 'login_frequency', 
-                           'time_spent_hours', 'assignment_submissions']
-                X = df[features]
-                y = df['dropout']
-                
-                # Split data
-                X_train, X_test, y_train, y_test = train_test_split(
-                    X, y, test_size=0.2, random_state=42, stratify=y
-                )
-                
-                # Train model
-                if model_type == "Random Forest":
-                    model = RandomForestClassifier(random_state=42, n_estimators=100)
-                
-                model.fit(X_train, y_train)
-                y_pred = model.predict(X_test)
-                
-                # Store model
-                st.session_state.model = model
-                st.session_state.features = features
-                st.session_state.scaler = StandardScaler()
-                
-                # Show results
-                accuracy = accuracy_score(y_test, y_pred)
-                
-                st.success(f"✅ Model trained successfully!")
-                st.metric("Model Accuracy", f"{accuracy:.2%}")
-                
-                # Feature importance
-                if hasattr(model, 'feature_importances_'):
-                    st.subheader("📊 Feature Importance")
-                    importance_df = pd.DataFrame({
-                        'feature': features,
-                        'importance': model.feature_importances_
-                    }).sort_values('importance', ascending=False)
-                    
-                    fig = px.bar(importance_df, x='importance', y='feature',
-                                title='Feature Importance')
-                    st.plotly_chart(fig, use_container_width=True)
+
     
     elif page == "Predictions":
         st.header("🔮 Student Risk Prediction")
