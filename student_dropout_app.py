@@ -82,62 +82,126 @@ def main():
                                ["Home", "Data Analysis", "Model Training", "Predictions", "Insights"])
     
     if page == "Home":
-    st.header("🏠 Welcome to Student Dropout Prediction System")
-    
-    st.subheader("📤 Upload Your CSV File OR Generate Sample Data")
-    
-    # Upload option
-    uploaded_file = st.file_uploader("Upload a CSV file with student data", type=["csv"])
-    
-    # Or generate button
-    generate_button = st.button("🚀 Generate Sample Data")
-    
-    # Decision: Upload or Generate
-    if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
-        st.session_state.df = df
-        st.success("✅ CSV data uploaded successfully!")
-    
-    elif generate_button:
-        with st.spinner("Generating synthetic student data..."):
-            df = st.session_state.predictor.generate_data(1000)
+        st.header("🏠 Welcome to Student Dropout Prediction System")
+        
+        st.subheader("📤 Upload Your CSV File OR Generate Sample Data")
+        
+        # Upload option
+        uploaded_file = st.file_uploader("Upload a CSV file with student data", type=["csv"])
+        
+        # Or generate button
+        generate_button = st.button("🚀 Generate Sample Data")
+        
+        # Decision: Upload or Generate
+        if uploaded_file is not None:
+            df = pd.read_csv(uploaded_file)
             st.session_state.df = df
-            st.success("✅ Sample data generated successfully!")
+            st.success("✅ CSV data uploaded successfully!")
+        
+        elif generate_button:
+            with st.spinner("Generating synthetic student data..."):
+                df = st.session_state.predictor.generate_data(1000)
+                st.session_state.df = df
+                st.success("✅ Sample data generated successfully!")
+        
+        # Show stats if data available
+        if 'df' in st.session_state:
+            df = st.session_state.df
+            st.subheader("📊 Dataset Overview")
+            
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.metric("Total Students", len(df))
+            with col2:
+                st.metric("Dropout Rate", f"{df['dropout'].mean():.1%}")
+            with col3:
+                st.metric("Avg Video Views", f"{df['video_views'].mean():.1f}")
+            with col4:
+                st.metric("Avg Quiz Attempts", f"{df['quiz_attempts'].mean():.1f}")
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.subheader("📈 Project Overview")
+                st.write("""
+                This dashboard helps educational platforms:
+                - **Analyze** student engagement patterns
+                - **Predict** potential dropouts early
+                - **Implement** timely interventions
+                - **Improve** student retention rates
+                """)
+            with col2:
+                st.subheader("🔧 Features")
+                st.write("""
+                - Real-time student risk assessment
+                - Interactive data visualizations
+                - Multiple ML model comparisons
+                - Actionable insights and recommendations
+                """)
     
-    # Show stats if data available
-    if 'df' in st.session_state:
+    elif page == "Data Analysis":
+        st.header("📊 Data Analysis")
+        
+        if 'df' not in st.session_state:
+            st.warning("⚠️ Please generate sample data first from the Home page.")
+            return
+        
         df = st.session_state.df
-        st.subheader("📊 Dataset Overview")
         
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.metric("Total Students", len(df))
-        with col2:
-            st.metric("Dropout Rate", f"{df['dropout'].mean():.1%}")
-        with col3:
-            st.metric("Avg Video Views", f"{df['video_views'].mean():.1f}")
-        with col4:
-            st.metric("Avg Quiz Attempts", f"{df['quiz_attempts'].mean():.1f}")
+        # Add data analysis visualizations here
+        st.subheader("Data Distribution")
         
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader("📈 Project Overview")
-            st.write("""
-            This dashboard helps educational platforms:
-            - **Analyze** student engagement patterns
-            - **Predict** potential dropouts early
-            - **Implement** timely interventions
-            - **Improve** student retention rates
-            """)
-        with col2:
-            st.subheader("🔧 Features")
-            st.write("""
-            - Real-time student risk assessment
-            - Interactive data visualizations
-            - Multiple ML model comparisons
-            - Actionable insights and recommendations
-            """)
-
+        # Display basic statistics
+        st.write("### Dataset Statistics")
+        st.write(df.describe())
+        
+        # Correlation matrix
+        st.write("### Correlation Matrix")
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        correlation = df[numeric_cols].corr()
+        
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(correlation, annot=True, cmap='coolwarm', center=0, ax=ax)
+        st.pyplot(fig)
+    
+    elif page == "Model Training":
+        st.header("🤖 Model Training")
+        
+        if 'df' not in st.session_state:
+            st.warning("⚠️ Please generate sample data first from the Home page.")
+            return
+        
+        df = st.session_state.df
+        
+        # Prepare data for training
+        feature_columns = ['video_views', 'quiz_attempts', 'login_frequency', 
+                          'time_spent_hours', 'assignment_submissions']
+        X = df[feature_columns]
+        y = df['dropout']
+        
+        # Split data
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # Train model
+        if st.button("🚀 Train Model"):
+            with st.spinner("Training Random Forest model..."):
+                model = RandomForestClassifier(n_estimators=100, random_state=42)
+                model.fit(X_train, y_train)
+                
+                # Make predictions
+                y_pred = model.predict(X_test)
+                accuracy = accuracy_score(y_test, y_pred)
+                
+                # Store model in session state
+                st.session_state.model = model
+                st.session_state.accuracy = accuracy
+                
+                st.success(f"✅ Model trained successfully! Accuracy: {accuracy:.2%}")
+                
+                # Show classification report
+                st.subheader("📊 Model Performance")
+                report = classification_report(y_test, y_pred, output_dict=True)
+                report_df = pd.DataFrame(report).transpose()
+                st.dataframe(report_df)
     
     elif page == "Predictions":
         st.header("🔮 Student Risk Prediction")
