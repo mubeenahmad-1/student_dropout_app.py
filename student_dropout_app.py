@@ -83,7 +83,43 @@ def main():
     
     if page == "Home":
         st.header("🏠 Welcome to Student Dropout Prediction System")
-        
+
+        st.subheader("📤 Upload Your CSV File OR Generate Sample Data")
+
+# Upload option
+uploaded_file = st.file_uploader("Upload a CSV file with student data", type=["csv"])
+
+# Or generate button
+generate_button = st.button("🚀 Generate Sample Data")
+
+# Decision: Upload or Generate
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.session_state.df = df
+    st.success("✅ CSV data uploaded successfully!")
+
+elif generate_button:
+    with st.spinner("Generating synthetic student data..."):
+        df = st.session_state.predictor.generate_data(1000)
+        st.session_state.df = df
+        st.success("✅ Sample data generated successfully!")
+
+# Show stats if data available
+if 'df' in st.session_state:
+    df = st.session_state.df
+    st.subheader("📊 Dataset Overview")
+    
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric("Total Students", len(df))
+    with col2:
+        st.metric("Dropout Rate", f"{df['dropout'].mean():.1%}")
+    with col3:
+        st.metric("Avg Video Views", f"{df['video_views'].mean():.1f}")
+    with col4:
+        st.metric("Avg Quiz Attempts", f"{df['quiz_attempts'].mean():.1f}")
+
         col1, col2 = st.columns(2)
         
         with col1:
