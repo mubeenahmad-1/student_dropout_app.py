@@ -83,7 +83,7 @@ def main():
     
     if page == "Home":
         st.header("🏠 Welcome to Student Dropout Prediction System")
-
+        
         st.subheader("📤 Upload Your CSV File OR Generate Sample Data")
 
 # Upload option
