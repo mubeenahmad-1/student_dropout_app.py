@@ -338,11 +338,11 @@ st.markdown("""
             text-align: center;
             color: #888;
             padding: 20px 0;
-            font-size: 14px;
+            font-size: 16px;
         }
     </style>
     <div class="footer">
-        Developed with ❤️ by <strong>Mubeen</strong> &copy; 2025
+        Developed with ❤️ by <strong>Mubeen Ahmad</strong> &copy; 2025
     </div>
 """, unsafe_allow_html=True)
 if __name__ == "__main__":
