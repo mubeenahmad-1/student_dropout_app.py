@@ -332,10 +332,7 @@ def main():
         
         roi = ((retention_value - intervention_cost) * potential_dropouts) / (intervention_cost * potential_dropouts) * 100
         st.metric("ROI", f"{roi:.1f}%")
-
-if __name__ == "__main__":
-    main()
-    st.markdown("""
+st.markdown("""
     <style>
         .footer {
             text-align: center;
@@ -348,3 +345,5 @@ if __name__ == "__main__":
         Developed with ❤️ by <strong>Mubeen</strong> &copy; 2025
     </div>
 """, unsafe_allow_html=True)
+if __name__ == "__main__":
+    main()
