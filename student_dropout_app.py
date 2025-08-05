@@ -342,7 +342,7 @@ st.markdown("""
         }
     </style>
     <div class="footer">
-        Developed with ❤️ by <strong>Mubeen Ahmad</strong> &copy; 2025
+        Developed with ❤️ by <strong>Group(Ali Nadeem ❤️ Ali Hassan ❤️ Mubeen Ahmad)</strong> &copy; 2025
     </div>
 """, unsafe_allow_html=True)
 if __name__ == "__main__":
