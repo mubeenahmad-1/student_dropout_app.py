@@ -67,6 +67,105 @@ def main():
     st.set_page_config(page_title="Student Dropout Prediction Dashboard", 
                        page_icon="🎓", layout="wide")
     
+    # Custom CSS for mango background - only for main content area
+    st.markdown("""
+    <style>
+        /* Main content area background */
+        .main .block-container {
+            background: linear-gradient(135deg, #FFB347, #FF9933, #FFCC5C) !important;
+            padding: 2rem !important;
+            border-radius: 15px !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Make text more readable on mango background */
+        .main .block-container h1, 
+        .main .block-container h2, 
+        .main .block-container h3,
+        .main .block-container h4,
+        .main .block-container h5,
+        .main .block-container h6 {
+            color: #2E3440 !important;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.3) !important;
+        }
+        
+        /* Style metric containers */
+        div[data-testid="metric-container"] {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid rgba(255, 153, 51, 0.3) !important;
+            padding: 1rem !important;
+            border-radius: 10px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Style info/success/warning/error boxes */
+        .stAlert {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-radius: 10px !important;
+        }
+        
+        /* Style buttons */
+        .stButton > button {
+            background: linear-gradient(45deg, #FF6B35, #FF9933) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: bold !important;
+            box-shadow: 0 3px 15px rgba(255, 107, 53, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stButton > button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4) !important;
+        }
+        
+        /* Style input boxes */
+        .stNumberInput > div > div > input,
+        .stSelectbox > div > div > div {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-radius: 8px !important;
+        }
+        
+        /* Style dataframes/tables */
+        .dataframe {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-radius: 10px !important;
+        }
+        
+        /* File uploader styling */
+        .stFileUploader {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-radius: 10px !important;
+            padding: 1rem !important;
+        }
+        
+        /* Keep sidebar original styling */
+        .sidebar .sidebar-content {
+            background: var(--background-color) !important;
+        }
+        
+        /* Make sure text is readable */
+        .main .block-container p,
+        .main .block-container li,
+        .main .block-container span {
+            color: #2E3440 !important;
+        }
+        
+        /* Footer styling */
+        .footer {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-radius: 10px !important;
+            margin-top: 2rem !important;
+            padding: 1rem !important;
+            text-align: center;
+            color: #2E3440 !important;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("🎓 Student Dropout Prediction Dashboard")
     st.markdown("**Analyze student behavior to predict potential dropouts**")
     
@@ -332,18 +431,13 @@ def main():
         
         roi = ((retention_value - intervention_cost) * potential_dropouts) / (intervention_cost * potential_dropouts) * 100
         st.metric("ROI", f"{roi:.1f}%")
-st.markdown("""
-    <style>
-        .footer {
-            text-align: center;
-            color: #888;
-            padding: 20px 0;
-            font-size: 16px;
-        }
-    </style>
-    <div class="footer">
-        Developed by <strong>Group(Ali Nadeem ❤️ Ali Hassan ❤️ Mubeen Ahmad)</strong> &copy; 2025
-    </div>
-""", unsafe_allow_html=True)
+
+    # Footer with mango theme
+    st.markdown("""
+        <div class="footer">
+            Developed by <strong>Group (Ali Nadeem ❤️ Ali Hassan ❤️ Mubeen Ahmad)</strong> &copy; 2025
+        </div>
+    """, unsafe_allow_html=True)
+
 if __name__ == "__main__":
     main()
