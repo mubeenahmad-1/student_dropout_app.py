@@ -203,7 +203,7 @@ def main():
         
         /* Header styling */
         header[data-testid="stHeader"] {
-            background: rgba(247, 255, 5, 0.9) !important;
+            background: rgba(255, 194, 40, 0.9) !important;
             border-bottom: 2px solid rgba(255, 194, 40, 0.5) !important;
         } 
     </style>
