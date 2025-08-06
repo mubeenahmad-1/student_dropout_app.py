@@ -201,11 +201,11 @@ def main():
             background: transparent !important;
         }
         
-        /* Header styling 
+        /* Header styling */
         header[data-testid="stHeader"] {
-            background: rgba(255, 179, 71, 0.9) !important;
+            background: rgba(247, 255, 5, 0.9) !important;
             border-bottom: 2px solid rgba(255, 153, 51, 0.5) !important;
-        } */
+        } 
     </style>
     """, unsafe_allow_html=True)
     
