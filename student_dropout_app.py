@@ -129,11 +129,11 @@ def main():
             transition: all 0.3s ease !important;
         }
         
-        .stButton > button:hover {
+        /* .stButton > button:hover {
             transform: translateY(-3px) !important;
             box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5) !important;
             background: linear-gradient(45deg, #FF5722, #FF8A50, #FFCC5C) !important;
-        }
+        } */
         
         /* Style input boxes */
         .stNumberInput > div > div > input,
