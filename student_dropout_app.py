@@ -118,7 +118,7 @@ def main():
         
         /* Style buttons with mango theme */
         .stButton > button {
-            background: linear-gradient(45deg, #FF6B35, #12100e, #FFB347) !important;
+            background: linear-gradient(45deg, #030000, #030000, #030000) !important;
             color: white !important;
             border: none !important;
             border-radius: 10px !important;
