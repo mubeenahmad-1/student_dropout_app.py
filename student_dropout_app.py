@@ -70,12 +70,20 @@ def main():
     # Custom CSS for mango background - only for main content area
     st.markdown("""
     <style>
-        /* Main content area background */
+        /* Apply mango background to the entire app background */
+        .stApp {
+            background: linear-gradient(135deg, #FFB347 0%, #FF9933 50%, #FFCC5C 100%) !important;
+        }
+        
+        /* Main content area styling */
         .main .block-container {
-            background: linear-gradient(135deg, #FFB347, #FF9933, #FFCC5C) !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px) !important;
             padding: 2rem !important;
             border-radius: 15px !important;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            margin-top: 1rem !important;
         }
         
         /* Make text more readable on mango background */
@@ -85,62 +93,74 @@ def main():
         .main .block-container h4,
         .main .block-container h5,
         .main .block-container h6 {
-            color: #2E3440 !important;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.3) !important;
+            color: #1a1a1a !important;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5) !important;
+            font-weight: bold !important;
         }
         
         /* Style metric containers */
         div[data-testid="metric-container"] {
-            background: rgba(255, 255, 255, 0.9) !important;
-            border: 1px solid rgba(255, 153, 51, 0.3) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid rgba(255, 153, 51, 0.4) !important;
             padding: 1rem !important;
-            border-radius: 10px !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+            backdrop-filter: blur(5px) !important;
         }
         
         /* Style info/success/warning/error boxes */
         .stAlert {
             background: rgba(255, 255, 255, 0.95) !important;
-            border-radius: 10px !important;
+            border-radius: 12px !important;
+            border: 1px solid rgba(255, 153, 51, 0.3) !important;
+            backdrop-filter: blur(5px) !important;
         }
         
-        /* Style buttons */
+        /* Style buttons with mango theme */
         .stButton > button {
-            background: linear-gradient(45deg, #FF6B35, #FF9933) !important;
+            background: linear-gradient(45deg, #FF6B35, #FF9933, #FFB347) !important;
             color: white !important;
             border: none !important;
-            border-radius: 8px !important;
+            border-radius: 10px !important;
             font-weight: bold !important;
-            box-shadow: 0 3px 15px rgba(255, 107, 53, 0.3) !important;
+            font-size: 16px !important;
+            padding: 0.75rem 2rem !important;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4) !important;
             transition: all 0.3s ease !important;
         }
         
         .stButton > button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4) !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5) !important;
+            background: linear-gradient(45deg, #FF5722, #FF8A50, #FFCC5C) !important;
         }
         
         /* Style input boxes */
         .stNumberInput > div > div > input,
-        .stSelectbox > div > div > div {
-            background: rgba(255, 255, 255, 0.9) !important;
+        .stSelectbox > div > div > div,
+        .stTextInput > div > div > input {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid rgba(255, 153, 51, 0.3) !important;
             border-radius: 8px !important;
+            color: #1a1a1a !important;
         }
         
         /* Style dataframes/tables */
         .dataframe {
-            background: rgba(255, 255, 255, 0.95) !important;
-            border-radius: 10px !important;
+            background: rgba(255, 255, 255, 0.98) !important;
+            border-radius: 12px !important;
+            border: 1px solid rgba(255, 153, 51, 0.3) !important;
         }
         
         /* File uploader styling */
         .stFileUploader {
             background: rgba(255, 255, 255, 0.9) !important;
-            border-radius: 10px !important;
-            padding: 1rem !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+            border: 2px dashed rgba(255, 153, 51, 0.5) !important;
         }
         
-        /* Keep sidebar original styling */
+        /* Sidebar remains normal */
         .sidebar .sidebar-content {
             background: var(--background-color) !important;
         }
@@ -148,20 +168,43 @@ def main():
         /* Make sure text is readable */
         .main .block-container p,
         .main .block-container li,
-        .main .block-container span {
-            color: #2E3440 !important;
+        .main .block-container span,
+        .main .block-container div {
+            color: #1a1a1a !important;
+            font-weight: 500 !important;
+        }
+        
+        /* Style selectbox and other components */
+        .stSelectbox label,
+        .stNumberInput label,
+        .stFileUploader label {
+            color: #1a1a1a !important;
+            font-weight: bold !important;
         }
         
         /* Footer styling */
         .footer {
-            background: rgba(255, 255, 255, 0.9) !important;
-            border-radius: 10px !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-radius: 12px !important;
             margin-top: 2rem !important;
-            padding: 1rem !important;
+            padding: 1.5rem !important;
             text-align: center;
-            color: #2E3440 !important;
+            color: #1a1a1a !important;
             font-size: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            font-weight: bold !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+            border: 1px solid rgba(255, 153, 51, 0.3) !important;
+        }
+        
+        /* Streamlit specific overrides */
+        .main > div {
+            background: transparent !important;
+        }
+        
+        /* Header styling */
+        header[data-testid="stHeader"] {
+            background: rgba(255, 179, 71, 0.9) !important;
+            border-bottom: 2px solid rgba(255, 153, 51, 0.5) !important;
         }
     </style>
     """, unsafe_allow_html=True)
