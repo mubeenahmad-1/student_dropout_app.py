@@ -72,7 +72,7 @@ def main():
     <style>
         /* Apply mango background to the entire app background */
         .stApp {
-            background: linear-gradient(135deg, #FFB347 0%, #FF9933 50%, #FFCC5C 100%) !important;
+            background: linear-gradient(135deg, #FFB347 0%, #FFD700 50%, #FFD700 100%) !important;
         }
         
         /* Main content area styling */
